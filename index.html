@@ -55,27 +55,25 @@ body{
 h1{font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:4px;text-align:center;}
 
 .divider{
-  width:100%;height:1px;background:var(--border);
-  margin:4px 0 12px;position:relative;
-  display:flex;align-items:center;justify-content:center;
+  width:100%;
+  height:2px;
+  margin:4px 0 12px;
+  border-radius:99px;
+  background:linear-gradient(90deg,#f00,#f80,#ff0,#0f0,#0ff,#00f,#f0f,#f00);
+  background-size:300% 100%;
+  animation:rgb-line 3s linear infinite;
+  box-shadow:0 0 8px rgba(255,100,255,.4);
 }
-.owned{
-  background:var(--bg);padding:0 12px;
-  font-size:.7rem;color:rgba(232,232,240,.5);letter-spacing:2px;
+@keyframes rgb-line{
+  from{background-position:0% 50%;}
+  to{background-position:300% 50%;}
 }
-
-.bio{
-  font-size:.8rem;
-  color:var(--muted);
-  letter-spacing:1px;
-  text-align:center;
-  margin-top:-8px;
-}
+.owned{display:none;}
 
 /* ========== GRID ========== */
 .grid{
   display:grid;
-  grid-template-columns:repeat(3, 1fr);
+  grid-template-columns:repeat(5, 1fr);
   gap:10px;
   width:100%;
 }
@@ -101,7 +99,6 @@ h1{font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:4px;text-align:cente
   overflow:hidden;
   transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
   text-align:center;
-  /* aspect-ratio убран — заменён фиксированным паддингом для стабильности */
   -webkit-tap-highlight-color:transparent;
   touch-action:manipulation;
 }
@@ -132,7 +129,6 @@ h1{font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:4px;text-align:cente
 .btn-sc:hover,.btn-sc:focus-visible{border-color:rgba(255,85,0,.5);box-shadow:0 8px 32px rgba(255,85,0,.2);}
 .btn-sc:hover::before{opacity:1;}
 
-/* SVG иконки — фиксированный размер, не сжимаются */
 .btn svg{
   width:32px;height:32px;
   min-width:32px;min-height:32px;
@@ -169,7 +165,7 @@ h1{font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:4px;text-align:cente
 
 .player{
   background:var(--card);
-  border:none;
+  border:1px solid var(--border);
   border-radius:18px;
   padding:14px 16px;
   display:flex;
@@ -178,7 +174,11 @@ h1{font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:4px;text-align:cente
   gap:12px;
   position:relative;
   overflow:hidden;
-  transition:box-shadow .3s ease;
+  transition:box-shadow .3s ease, border-color .3s ease;
+}
+.player.playing{
+  border-color:rgba(145,70,255,.3);
+  box-shadow:0 0 30px rgba(145,70,255,.08);
 }
 
 /* Artwork */
@@ -191,11 +191,12 @@ h1{font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:4px;text-align:cente
   overflow:hidden;
   flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
   transition:box-shadow .3s ease;
   position:relative;
 }
-.player-art:hover{ box-shadow:0 0 18px rgba(145,70,255,.3); }
+.player.playing .player-art{
+  box-shadow:0 0 18px rgba(145,70,255,.35);
+}
 .player-art img{
   position:absolute;inset:0;
   width:100%;height:100%;
@@ -215,13 +216,29 @@ h1{font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:4px;text-align:cente
   min-width:0;
   display:flex;
   flex-direction:column;
-  gap:6px;
+  gap:4px;
 }
+
+/* Счётчик треков */
+.track-counter{
+  font-size:.6rem;
+  color:var(--muted);
+  letter-spacing:1.5px;
+  font-variant-numeric:tabular-nums;
+}
+
 .player-title{
   font-size:.82rem;
   font-weight:600;
   color:var(--text);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  transition:opacity .18s ease, transform .18s ease;
+}
+.player-title.switching{
+  opacity:0;
+  transform:translateX(8px);
 }
 .player-title.empty{ color:var(--muted); }
 
@@ -230,6 +247,7 @@ h1{font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:4px;text-align:cente
   display:flex;
   align-items:center;
   gap:8px;
+  margin-top:2px;
 }
 .time{
   font-size:.65rem;
@@ -355,50 +373,23 @@ h1       {animation-delay:.1s;}
 .grid    {animation-delay:.2s;}
 @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
 
-/* ========== MOBILE RESPONSIVE ========== */
+/* ========== MOBILE ========== */
 @media (max-width: 400px){
-  .container{
-    padding:28px 14px;
-    gap:16px;
-  }
-
-  .btn{
-    padding:14px 6px;
-    gap:7px;
-    border-radius:14px;
-  }
-
-  .btn svg{
-    width:28px;height:28px;
-    min-width:28px;min-height:28px;
-  }
-
-  .btn-label{
-    font-size:.68rem;
-  }
-
-  h1{font-size:2rem;}
-
-  .player{
-    padding:12px 12px;
-    gap:10px;
-  }
-
-  .player-art{
-    width:56px;height:56px;
-    min-width:56px;min-height:56px;
-  }
+  .container{ padding:28px 12px; gap:16px; }
+  .grid{ gap:6px; }
+  .btn{ padding:12px 4px; gap:6px; border-radius:12px; }
+  .btn svg{ width:22px;height:22px; min-width:22px;min-height:22px; }
+  .btn-label{ font-size:.6rem; }
+  h1{ font-size:2rem; }
+  .player{ padding:12px; gap:10px; }
+  .player-art{ width:56px;height:56px; min-width:56px;min-height:56px; }
 }
-
 @media (min-width: 401px) and (max-width: 520px){
-  .container{
-    padding:32px 16px;
-  }
-
-  .btn svg{
-    width:30px;height:30px;
-    min-width:30px;min-height:30px;
-  }
+  .container{ padding:32px 16px; }
+  .grid{ gap:8px; }
+  .btn{ padding:13px 5px; }
+  .btn svg{ width:27px;height:27px; min-width:27px;min-height:27px; }
+  .btn-label{ font-size:.66rem; }
 }
 </style>
 </head>
@@ -433,7 +424,7 @@ h1       {animation-delay:.1s;}
 
   <div class="avatar"><img src="avatar.gif" alt="avatar" loading="eager"></div>
   <h1>Мои Соцсети</h1>
-  <div class="divider"><span class="owned">Music · Streaming · Vibes</span></div>
+  <div class="divider"><span class="owned">Player · Of · Majestic</span></div>
 
   <div class="grid">
     <!-- YouTube -->
@@ -472,13 +463,7 @@ h1       {animation-delay:.1s;}
       </svg>
       <span class="btn-label">SoundCloud</span>
     </a>
-    <a href="https://youtu.be/Btrtfpqr-2c" target="_blank" rel="noopener noreferrer" class="btn btn-yt">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" fill="url(#g-yt)"/>
-        <polygon points="9.75,15.02 15.5,12 9.75,8.98" fill="#fff"/>
-      </svg>
-      <span class="btn-label">Последнее видео</span>
-    </a>
+
   </div>
 
   <!-- ===== PLAYER ===== -->
@@ -498,6 +483,7 @@ h1       {animation-delay:.1s;}
 
       <!-- Info + progress -->
       <div class="player-info">
+        <div class="track-counter" id="trackCounter">— / —</div>
         <div class="player-title empty" id="trackTitle">Нет трека</div>
         <div class="player-progress">
           <span class="time" id="timeCur">0:00</span>
@@ -549,50 +535,69 @@ h1       {animation-delay:.1s;}
 <audio id="audio"></audio>
 
 <script>
-// ======================================================
-//  ТРЕКИ — кидай файлы в ту же папку что и index.html
-//  src   — имя аудиофайла (например 'track1.mp3')
-//  title — название трека в плеере
-//  cover — имя картинки-обложки, или '' если не нужно
-// ======================================================
+// ============================================================
+//  КАК ДОБАВИТЬ МУЗЫКУ:
+//
+//  1. Закинь mp3 файл в ту же папку что и index.html
+//  2. Добавь строку в массив TRACKS ниже:
+//
+//  { src: 'имя_файла.mp3', title: 'Исполнитель - Название', cover: 'обложка.jpg' },
+//
+//  cover — картинка обложки (jpg/png/gif), или '' если не нужна
+//  Треков можно добавить сколько угодно!
+// ============================================================
 const TRACKS = [
-  { src: 'track.mp3', title: 'Yung Lean - Smirnoff Ice', cover: 'avatar667.png' },
-  // { src: 'track2.mp3', title: 'Трек 2', cover: '' },
+  { src: 'track.mp3',  title: 'Yung Lean - Smirnoff Ice',  cover: 'avatar667.png' },
+  { src: 'track2.mp3', title: 'Aquakey - Она фрик ',  cover: '300x300.png' },
+  // { src: 'track3.mp3', title: 'Исполнитель - Название 3',  cover: 'cover3.jpg' },
+  // { src: 'track4.mp3', title: 'Исполнитель - Название 4',  cover: '' },
 ];
-// ======================================================
+// ============================================================
 
-let idx = 0;
+let idx      = 0;
 let isLoaded = false;
 
-const audio      = document.getElementById('audio');
-const playBtn    = document.getElementById('playBtn');
-const iconPlay   = document.getElementById('iconPlay');
-const iconPause  = document.getElementById('iconPause');
-const trackFill  = document.getElementById('trackFill');
-const trackBar   = document.getElementById('trackBar');
-const timeCur    = document.getElementById('timeCur');
-const timeDur    = document.getElementById('timeDur');
-const trackTitle = document.getElementById('trackTitle');
-const player     = document.getElementById('player');
-const artImg     = document.getElementById('artImg');
-const artIcon    = document.getElementById('artIcon');
-const volSlider  = document.getElementById('volSlider');
-const volIcon    = document.getElementById('volIcon');
-const volValue   = document.getElementById('volValue');
+const audio        = document.getElementById('audio');
+const playBtn      = document.getElementById('playBtn');
+const iconPlay     = document.getElementById('iconPlay');
+const iconPause    = document.getElementById('iconPause');
+const trackFill    = document.getElementById('trackFill');
+const trackBar     = document.getElementById('trackBar');
+const timeCur      = document.getElementById('timeCur');
+const timeDur      = document.getElementById('timeDur');
+const trackTitle   = document.getElementById('trackTitle');
+const trackCounter = document.getElementById('trackCounter');
+const player       = document.getElementById('player');
+const artImg       = document.getElementById('artImg');
+const artIcon      = document.getElementById('artIcon');
+const volSlider    = document.getElementById('volSlider');
+const volIcon      = document.getElementById('volIcon');
+const volValue     = document.getElementById('volValue');
 
 function fmt(s){
   s = Math.floor(s) || 0;
   return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60);
 }
 
+function updateCounter(){
+  trackCounter.textContent = TRACKS.length
+    ? (idx + 1) + ' / ' + TRACKS.length
+    : '— / —';
+}
+
 function loadTrack(i, autoplay){
   if(!TRACKS.length) return;
-  idx = (i + TRACKS.length) % TRACKS.length;
+  idx = ((i % TRACKS.length) + TRACKS.length) % TRACKS.length;
   const t = TRACKS[idx];
-  audio.src = t.src;
-  audio.load();
-  trackTitle.textContent = t.title;
-  trackTitle.classList.remove('empty');
+
+  // Анимация смены названия — слайд вправо → появляется
+  trackTitle.classList.add('switching');
+  setTimeout(()=>{
+    trackTitle.textContent = t.title;
+    trackTitle.classList.remove('empty', 'switching');
+  }, 180);
+
+  // Обложка
   if(t.cover){
     artImg.src = t.cover;
     artImg.classList.add('visible');
@@ -602,15 +607,25 @@ function loadTrack(i, autoplay){
     artImg.classList.remove('visible');
     artIcon.classList.remove('hidden');
   }
-  timeCur.textContent = '0:00';
-  timeDur.textContent = '0:00';
+
+  // Сброс
+  timeCur.textContent   = '0:00';
+  timeDur.textContent   = '0:00';
   trackFill.style.width = '0%';
+
+  updateCounter();
+
+  audio.src = t.src;
+  audio.load();
   isLoaded = true;
+
   if(autoplay) audio.play().catch(()=>{});
 }
+
+// Инициализация
 if(TRACKS.length) loadTrack(0, false);
 
-// Громкость
+// ---- Громкость ----
 audio.volume = 0.9;
 
 volSlider.addEventListener('input', ()=>{
@@ -618,7 +633,6 @@ volSlider.addEventListener('input', ()=>{
   audio.volume = v;
   volValue.textContent = volSlider.value + '%';
   volSlider.style.setProperty('--val', volSlider.value + '%');
-  // Смена иконки громкости
   if(v === 0){
     volIcon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
   } else if(v < 0.5){
@@ -628,51 +642,49 @@ volSlider.addEventListener('input', ()=>{
   }
 });
 
-// Play/Pause
+// ---- Play / Pause ----
 playBtn.addEventListener('click', ()=>{
   if(!isLoaded) return;
   audio.paused ? audio.play().catch(()=>{}) : audio.pause();
 });
 
 audio.addEventListener('play', ()=>{
-  iconPlay.style.display = 'none';
+  iconPlay.style.display  = 'none';
   iconPause.style.display = '';
   player.classList.add('playing');
 });
 audio.addEventListener('pause', ()=>{
-  iconPlay.style.display = '';
+  iconPlay.style.display  = '';
   iconPause.style.display = 'none';
   player.classList.remove('playing');
 });
-audio.addEventListener('ended', ()=>{
-  loadTrack(idx + 1, true);
-});
 
+// Авто-переход после окончания трека
+audio.addEventListener('ended', ()=>{ loadTrack(idx + 1, true); });
+
+// ---- Прогресс ----
 audio.addEventListener('timeupdate', ()=>{
   if(!audio.duration) return;
-  const pct = (audio.currentTime / audio.duration) * 100;
-  trackFill.style.width = pct + '%';
-  timeCur.textContent = fmt(audio.currentTime);
+  trackFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+  timeCur.textContent   = fmt(audio.currentTime);
 });
 audio.addEventListener('loadedmetadata', ()=>{
   timeDur.textContent = fmt(audio.duration);
 });
 
-// Клик по прогрессбару
-trackBar.addEventListener('click', e => {
+trackBar.addEventListener('click', e=>{
   if(!audio.duration) return;
   const r = trackBar.getBoundingClientRect();
   audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
 });
-
-// Touch для прогрессбара
-trackBar.addEventListener('touchstart', e => {
+trackBar.addEventListener('touchstart', e=>{
   e.preventDefault();
   if(!audio.duration) return;
   const r = trackBar.getBoundingClientRect();
   audio.currentTime = ((e.touches[0].clientX - r.left) / r.width) * audio.duration;
 }, { passive: false });
 
+// ---- Назад / Вперёд ----
 document.getElementById('prevBtn').addEventListener('click', ()=>{ loadTrack(idx - 1, true); });
 document.getElementById('nextBtn').addEventListener('click', ()=>{ loadTrack(idx + 1, true); });
 </script>
