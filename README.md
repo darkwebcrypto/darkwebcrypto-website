@@ -11,7 +11,7 @@ I'm enthusiastic about clean code, scalable architecture, and solving complex pr
 ### Languages
 - JavaScript/TypeScript
 - Python
-- Go
+- HTML/CSS
 
 ### Tools & Frameworks
 - React
