@@ -29,7 +29,6 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  /* убрано overflow:hidden — оно резало контент на мобилке */
   overflow-y:auto;
   padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
 }
@@ -62,13 +61,21 @@ h1{font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:4px;text-align:cente
 }
 .owned{
   background:var(--bg);padding:0 12px;
-  font-size:.7rem;color:var(--muted);letter-spacing:2px;
+  font-size:.7rem;color:rgba(232,232,240,.5);letter-spacing:2px;
+}
+
+.bio{
+  font-size:.8rem;
+  color:var(--muted);
+  letter-spacing:1px;
+  text-align:center;
+  margin-top:-8px;
 }
 
 /* ========== GRID ========== */
 .grid{
   display:grid;
-  grid-template-columns:repeat(5, 1fr);
+  grid-template-columns:repeat(3, 1fr);
   gap:10px;
   width:100%;
 }
@@ -355,12 +362,6 @@ h1       {animation-delay:.1s;}
     gap:16px;
   }
 
-  /* На очень маленьких — 3 колонки в 2 ряда вместо 5 в 1 */
-  .grid{
-    grid-template-columns:repeat(3, 1fr);
-    gap:10px;
-  }
-
   .btn{
     padding:14px 6px;
     gap:7px;
@@ -432,7 +433,7 @@ h1       {animation-delay:.1s;}
 
   <div class="avatar"><img src="avatar.gif" alt="avatar" loading="eager"></div>
   <h1>Мои Соцсети</h1>
-  <div class="divider"><span class="owned">owned by darkwebcrypto</span></div>
+  <div class="divider"><span class="owned">Music · Streaming · Vibes</span></div>
 
   <div class="grid">
     <!-- YouTube -->
@@ -470,6 +471,13 @@ h1       {animation-delay:.1s;}
         <path d="M11.56 8.87V17h8.76c.87 0 1.58-.71 1.58-1.58a1.58 1.58 0 0 0-1.38-1.56v-.06a2.84 2.84 0 0 0-2.84-2.84c-.24 0-.48.03-.7.09A4.38 4.38 0 0 0 12.7 8.4c-.25 0-.5.02-.74.06a.55.55 0 0 0-.4.41zM1.08 13.3a.9.9 0 0 0-.9.9v.83c0 .5.4.9.9.9s.9-.4.9-.9v-.83a.9.9 0 0 0-.9-.9zm1.96-.6a.9.9 0 0 0-.9.9v2.02c0 .5.4.9.9.9s.9-.4.9-.9v-2.02a.9.9 0 0 0-.9-.9zm1.95-.32a.9.9 0 0 0-.9.9v2.67c0 .5.4.9.9.9s.9-.4.9-.9v-2.67a.9.9 0 0 0-.9-.9zm1.96-.5a.9.9 0 0 0-.9.9v3.34c0 .5.4.9.9.9s.9-.4.9-.9v-3.34a.9.9 0 0 0-.9-.9zm1.97-.78a.9.9 0 0 0-.9.9v4.44c0 .5.4.9.9.9s.9-.4.9-.9V12a.9.9 0 0 0-.9-.9zm1.97 1.5a.9.9 0 0 0-.9.9v3.12c0 .5.4.9.9.9s.9-.4.9-.9V13.4a.9.9 0 0 0-.9-.9z" fill="url(#g-sc)"/>
       </svg>
       <span class="btn-label">SoundCloud</span>
+    </a>
+    <a href="https://youtu.be/Btrtfpqr-2c" target="_blank" rel="noopener noreferrer" class="btn btn-yt">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" fill="url(#g-yt)"/>
+        <polygon points="9.75,15.02 15.5,12 9.75,8.98" fill="#fff"/>
+      </svg>
+      <span class="btn-label">Последнее видео</span>
     </a>
   </div>
 
@@ -600,8 +608,6 @@ function loadTrack(i, autoplay){
   isLoaded = true;
   if(autoplay) audio.play().catch(()=>{});
 }
-
-// Init — загружаем трек без автоплея (браузеры блокируют autoplay без жеста)
 if(TRACKS.length) loadTrack(0, false);
 
 // Громкость
